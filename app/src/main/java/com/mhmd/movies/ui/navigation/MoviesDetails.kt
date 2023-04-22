@@ -21,7 +21,7 @@ fun NavGraphBuilder.addMoviesDetail(
     composable(
         route = Screen.MoviesDetail.route + "/{movieId}",
         arguments = Screen.MoviesDetail.arguments,
-        enterTransition = { _, _ ->
+        enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { width },
                 animationSpec = tween(
@@ -30,7 +30,7 @@ fun NavGraphBuilder.addMoviesDetail(
                 )
             ) + fadeIn(animationSpec = tween(300))
         },
-        popExitTransition = { _, _ ->
+        popExitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { width },
                 animationSpec = tween(
@@ -39,7 +39,7 @@ fun NavGraphBuilder.addMoviesDetail(
                 )
             ) + fadeOut(animationSpec = tween(300))
         }
-    ){
+    ) {
         MoviesDetails(
             imageLoader = imageLoader
         )

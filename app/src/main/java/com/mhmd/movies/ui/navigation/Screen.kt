@@ -1,17 +1,17 @@
 package com.mhmd.movies.ui.navigation
 
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
-import androidx.navigation.compose.NamedNavArgument
-import androidx.navigation.compose.navArgument
+import androidx.navigation.navArgument
 
-sealed class Screen(val route: String, val arguments: List<NamedNavArgument>){
+sealed class Screen(val route: String, val arguments: List<NamedNavArgument>) {
 
-    object MoviesList: Screen(
+    object MoviesList : Screen(
         route = "moviesList",
         arguments = emptyList()
     )
 
-    object MoviesDetail: Screen(
+    object MoviesDetail : Screen(
         route = "moviesDetail",
         arguments = listOf(navArgument("movieId") {
             type = NavType.IntType

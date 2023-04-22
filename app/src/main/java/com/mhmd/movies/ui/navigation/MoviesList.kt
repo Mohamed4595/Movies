@@ -23,7 +23,7 @@ fun NavGraphBuilder.addMoviesList(
 ) {
     composable(
         route = Screen.MoviesList.route,
-        exitTransition = {_, _ ->
+        exitTransition = {
             slideOutHorizontally(
                 targetOffsetX = { -width },
                 animationSpec = tween(
@@ -32,7 +32,7 @@ fun NavGraphBuilder.addMoviesList(
                 )
             ) + fadeOut(animationSpec = tween(300))
         },
-        popEnterTransition = { _, _ ->
+        popEnterTransition = {
             slideInHorizontally(
                 initialOffsetX = { -width },
                 animationSpec = tween(

@@ -1,0 +1,22 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "Movies"
+include ':app'
+include ':core'
+include ':constants'
+include ':components'
+include ':movies'
+include ':movies:moviesList'
+include ':movies:moviesDetails'
+include ':movies:moviesdetails:data'
+include ':movies:moviesdetails:domain'
+include ':movies:moviesdetails:presentation'
+include ':movies:movieslist:data'
+include ':movies:movieslist:domain'
+include ':movies:movieslist:presentation'

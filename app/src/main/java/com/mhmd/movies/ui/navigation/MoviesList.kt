@@ -8,11 +8,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import coil.ImageLoader
 import com.google.accompanist.navigation.animation.composable
-import com.moviesList.presentation.MoviesList
+import com.moviesList.presentation.ui.MoviesListScreen
+import com.moviesList.presentation.ui.MoviesListViewModel
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
@@ -41,9 +43,13 @@ fun NavGraphBuilder.addMoviesList(
                 )
             ) + fadeIn(animationSpec = tween(300))
         },
-    ){
-
-        MoviesList(
+    ) {
+        val viewModel: MoviesListViewModel = hiltViewModel()
+        MoviesListScreen(
+            state = viewModel.state.value,
+            events = viewModel::onTriggerEvent,
+            navigateToDetailScreen = {
+            },
             imageLoader = imageLoader,
         )
     }

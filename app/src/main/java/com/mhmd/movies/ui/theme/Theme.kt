@@ -16,7 +16,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import com.mhmd.components.*
+import com.mhmd.components.DarkColorBackground
+import com.mhmd.components.DarkColorOnBackground
+import com.mhmd.components.DarkColorOnSurface
+import com.mhmd.components.DarkColorSurface
+import com.mhmd.components.ErrorColor
+import com.mhmd.components.LightColorBackground
+import com.mhmd.components.LightColorOnBackground
+import com.mhmd.components.LightColorOnSurface
+import com.mhmd.components.LightColorSurface
+import com.mhmd.components.OnErrorColor
+import com.mhmd.components.PrimaryColorBlue
+import com.mhmd.components.PrimaryColorVariantBlue
+import com.mhmd.components.SecondaryColorBlue
 
 private val LightColorBlue = lightColors(
     primary = PrimaryColorBlue,
@@ -46,7 +58,11 @@ private val DarkColorBlue = darkColors(
 )
 
 @Composable
-fun MoviesTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun MoviesTheme(
+    isSplashView: Boolean = false,
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
     val colors = if (darkTheme) {
         DarkColorBlue
     } else {
@@ -56,8 +72,10 @@ fun MoviesTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colors.surface.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+            window.statusBarColor =
+                if (isSplashView) Color.Transparent.toArgb() else colors.surface.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars =
+                if (isSplashView) false else !darkTheme
         }
     }
     MaterialTheme(

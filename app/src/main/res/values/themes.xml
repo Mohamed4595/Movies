@@ -41,6 +41,13 @@
         <item name="android:windowLightStatusBar" >false</item>
     </style>
 
+    <style name="AppTheme.BrandedLaunch">
+    <item name="android:windowBackground">@drawable/splash_gradient_background_blue</item>
+    <item name="android:statusBarColor">@color/transparent</item>
+    <item name="android:windowTranslucentNavigation">true</item>
+    <item name="android:windowLightStatusBar">false</item>
+    </style>
+
     <style name="Theme.Movies.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Movies.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

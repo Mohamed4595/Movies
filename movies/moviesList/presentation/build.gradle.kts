@@ -45,6 +45,7 @@ dependencies {
     implementation(project(Modules.components))
     implementation(project(Modules.core))
     implementation(project(Modules.moviesListDomain))
+    implementation(project(Modules.moviesListInteractors))
 
     implementation(Coil.coil)
 

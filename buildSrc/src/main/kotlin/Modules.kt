@@ -13,6 +13,7 @@ object Modules {
     const val moviesList = ":movies:moviesList"
     const val moviesListData = ":movies:movieslist:data"
     const val moviesListDomain = ":movies:movieslist:domain"
+    const val moviesListInteractors = ":movies:movieslist:interactors"
     const val moviesListPresentation = ":movies:movieslist:presentation"
 
     const val moviesDetails = ":movies:moviesDetails"

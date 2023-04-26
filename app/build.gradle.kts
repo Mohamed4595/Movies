@@ -50,9 +50,10 @@ android {
 dependencies {
 
     implementation(project(Modules.core))
-
+    implementation(project(Modules.components))
     implementation(project(Modules.moviesListData))
     implementation(project(Modules.moviesListDomain))
+    implementation(project(Modules.moviesListInteractors))
     implementation(project(Modules.moviesListPresentation))
 
 
@@ -82,6 +83,8 @@ dependencies {
 
     implementation(Kotlinx.serialization)
     implementation(Ktor.core)
+    implementation(Ktor.clientSerialization)
+    implementation(Ktor.android)
 
     androidTestImplementation(AndroidXTest.runner)
     androidTestImplementation(ComposeTest.uiTestJunit4)

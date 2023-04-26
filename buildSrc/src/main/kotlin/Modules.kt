@@ -16,8 +16,8 @@ object Modules {
     const val moviesListInteractors = ":movies:movieslist:interactors"
     const val moviesListPresentation = ":movies:movieslist:presentation"
 
-    const val moviesDetails = ":movies:moviesDetails"
-    const val moviesDetailsData = ":movies:moviesdetails:data"
-    const val moviesDetailsDomain = ":movies:moviesdetails:domain"
-    const val moviesDetailsPresentation = ":movies:moviesdetails:presentation"
+//    const val moviesDetails = ":movies:moviesDetails"
+//    const val moviesDetailsData = ":movies:moviesdetails:data"
+//    const val moviesDetailsDomain = ":movies:moviesdetails:domain"
+//    const val moviesDetailsPresentation = ":movies:moviesdetails:presentation"
 }

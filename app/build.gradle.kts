@@ -57,9 +57,9 @@ dependencies {
     implementation(project(Modules.moviesListPresentation))
 
 
-    implementation(project(Modules.moviesDetailsData))
-    implementation(project(Modules.moviesDetailsDomain))
-    implementation(project(Modules.moviesDetailsPresentation))
+//    implementation(project(Modules.moviesDetailsData))
+//    implementation(project(Modules.moviesDetailsDomain))
+//    implementation(project(Modules.moviesDetailsPresentation))
 
     implementation(Coil.coil)
 

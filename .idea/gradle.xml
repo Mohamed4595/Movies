@@ -17,12 +17,7 @@
             <option value="$PROJECT_DIR$/constants" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/movies" />
-            <option value="$PROJECT_DIR$/movies/moviesDetails" />
             <option value="$PROJECT_DIR$/movies/moviesList" />
-            <option value="$PROJECT_DIR$/movies/moviesdetails" />
-            <option value="$PROJECT_DIR$/movies/moviesdetails/data" />
-            <option value="$PROJECT_DIR$/movies/moviesdetails/domain" />
-            <option value="$PROJECT_DIR$/movies/moviesdetails/presentation" />
             <option value="$PROJECT_DIR$/movies/movieslist" />
             <option value="$PROJECT_DIR$/movies/movieslist/data" />
             <option value="$PROJECT_DIR$/movies/movieslist/domain" />

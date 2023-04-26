@@ -10,7 +10,6 @@ import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
 import coil.ImageLoader
 import com.google.accompanist.navigation.animation.composable
-import com.moviesdetails.presentation.MoviesDetails
 
 
 @ExperimentalAnimationApi
@@ -40,8 +39,8 @@ fun NavGraphBuilder.addMoviesDetail(
             ) + fadeOut(animationSpec = tween(300))
         }
     ) {
-        MoviesDetails(
-            imageLoader = imageLoader
-        )
+//        MoviesDetails(
+//            imageLoader = imageLoader
+//        )
     }
 }

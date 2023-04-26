@@ -2,4 +2,15 @@
 <resources>
     <string name="movies">Movies</string>
     <string name="no_result">No Result Found</string>
+    <string name="day_char">%1$d Day</string>
+    <string name="hour_char">%1$d H</string>
+    <string name="minute_char">%1$d M</string>
+    <string name="second_char">%1$d S</string>
+    <string name="yesterday_at">\"Yesterday at \"</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="popular">Popular</string>
+    <string name="latest">Latest</string>
+    <string name="now_playing">Now Playing</string>
+    <string name="top_rated">Top Rated</string>
+    <string name="upcoming">Upcoming</string>
 </resources>

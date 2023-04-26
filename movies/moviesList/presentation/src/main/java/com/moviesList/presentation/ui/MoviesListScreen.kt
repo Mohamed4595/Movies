@@ -2,27 +2,22 @@ package com.moviesList.presentation.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import coil.ImageLoader
+import com.mhmd.components.AppBarDivider
 import com.mhmd.components.DefaultScreenUI
 import com.mhmd.components.MoviesTopAppBar
 import com.mhmd.components.PaginatedLazyVerticalGrid
 import com.mhmd.components.R
 import com.moviesList.domain.Movie
 import com.moviesList.presentation.components.MovieListItem
+import com.moviesList.presentation.components.MoviesFilter
 
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
@@ -47,14 +42,16 @@ fun MoviesListScreen(
             Column {
                 MoviesTopAppBar(
                     title = stringResource(id = R.string.movies),
+                    isDivider = false
                 )
-                AnimatedVisibility(visible = state.movies.isNotEmpty()) {
-                    val listState = rememberLazyListState()
+                MoviesFilter(state = state, events = events)
+                AppBarDivider()
+                AnimatedVisibility(visible = true) {
 
                     state.movies.PaginatedLazyVerticalGrid(
-                        listState = listState,
+                        modifier = Modifier.fillMaxSize(),
                         onLoadMore = {
-
+                            events(MoviesListEvents.GetNextPageMovies)
                         },
                         content = { item, _ ->
                             MovieListItem(
@@ -65,7 +62,8 @@ fun MoviesListScreen(
                                 imageLoader = imageLoader
                             )
                         },
-                        canLoadMore = false //state.currentPage.value < state.totalPages.value
+                        isLoading = state.isLoadingNextPage,
+                        canLoadMore = state.page <= state.totalPages
                     )
                 }
             }

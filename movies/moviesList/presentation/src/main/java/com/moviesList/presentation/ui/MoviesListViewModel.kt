@@ -20,7 +20,7 @@ class MoviesListViewModel
 constructor(
     private val getPopularMovies: GetPopularMovies,
     private val logger: Logger,
-): ViewModel(){
+) : ViewModel() {
 
     val state: MutableState<MoviesListState> = mutableStateOf(MoviesListState())
 
@@ -28,32 +28,78 @@ constructor(
         onTriggerEvent(MoviesListEvents.GetMovies)
     }
 
-    fun onTriggerEvent(event: MoviesListEvents){
-        when(event){
+    fun onTriggerEvent(event: MoviesListEvents) {
+        when (event) {
             is MoviesListEvents.GetMovies -> {
                 getMovies()
             }
+
+            is MoviesListEvents.GetNextPageMovies -> {
+                getNextPageMovies()
+            }
+
             is MoviesListEvents.OnRemoveHeadFromQueue -> {
                 removeHeadMessage()
             }
+
             is MoviesListEvents.Error -> {
                 when (val uiComponent = event.uiComponent) {
                     is UIComponent.None -> logger.log("getMovies: ${uiComponent.message}")
                     else -> appendToMessageQueue(uiComponent)
                 }
             }
+
+            is MoviesListEvents.OnSelectMoviesFilter -> {
+                state.value = state.value.copy(selectedMoviesFilter = event.moviesFilter)
+                getMovies()
+            }
         }
     }
 
-    private fun getMovies(){
-        getPopularMovies.execute().onEach { dataState ->
-            when(dataState){
+    private fun getMovies() {
+        getPopularMovies.execute(state.value.page, state.value.selectedMoviesFilter)
+            .onEach { dataState ->
+                when (dataState) {
+                    is DataState.Loading -> {
+                        state.value =
+                            state.value.copy(progressBarState = dataState.progressBarState)
+                    }
+
+                    is DataState.Data -> {
+                        state.value = state.value.copy(
+                            movies = dataState.data?.results ?: listOf(),
+                            totalPages = dataState.data?.totalPages ?: 0
+                        )
+                    }
+
+                    is DataState.Response -> {
+                        when (val uiComponent = dataState.uiComponent) {
+                            is UIComponent.None -> logger.log("getMovies: ${uiComponent.message}")
+                            else -> appendToMessageQueue(uiComponent)
+                        }
+                    }
+                }
+            }.launchIn(viewModelScope)
+    }
+
+    private fun getNextPageMovies() {
+        getPopularMovies.execute(
+            state.value.page + 1,
+            state.value.selectedMoviesFilter
+        ).onEach { dataState ->
+            when (dataState) {
                 is DataState.Loading -> {
-                    state.value = state.value.copy(progressBarState = dataState.progressBarState)
+                    state.value = state.value.copy(isLoadingNextPage = dataState.progressBarState)
                 }
+
                 is DataState.Data -> {
-                    state.value = state.value.copy(movies = dataState.data?: listOf())
+                    state.value = state.value.copy(
+                        movies = state.value.movies.plus(
+                            dataState.data?.results ?: listOf()
+                        ), page = state.value.page + 1
+                    )
                 }
+
                 is DataState.Response -> {
                     when (val uiComponent = dataState.uiComponent) {
                         is UIComponent.None -> logger.log("getMovies: ${uiComponent.message}")
@@ -64,7 +110,7 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun appendToMessageQueue(uiComponent: UIComponent){
+    private fun appendToMessageQueue(uiComponent: UIComponent) {
         val queue = state.value.errorQueue
         queue.add(uiComponent)
         state.value = state.value.copy(errorQueue = Queue(mutableListOf())) // force recompose
@@ -77,7 +123,7 @@ constructor(
             queue.remove() // can throw exception if empty
             state.value = state.value.copy(errorQueue = Queue(mutableListOf())) // force recompose
             state.value = state.value.copy(errorQueue = queue)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             logger.log("Nothing to remove from DialogQueue")
         }
     }

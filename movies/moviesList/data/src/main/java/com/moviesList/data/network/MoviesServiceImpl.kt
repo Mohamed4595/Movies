@@ -9,6 +9,7 @@ import com.moviesList.data.network.model.toFailedResponse
 import com.moviesList.data.network.model.toMovie
 import com.moviesList.data.network.model.toPagination
 import com.moviesList.domain.Movie
+import com.moviesList.domain.MoviesFilter
 import com.moviesList.domain.Pagination
 import io.ktor.client.HttpClient
 import io.ktor.client.call.receive
@@ -20,9 +21,18 @@ import io.ktor.http.takeFrom
 
 class MoviesServiceImpl(private val client: HttpClient) : MoviesService {
 
-    override suspend fun getMovies(page: Int): ApiResponse<Pagination<Movie>> {
-        val httpResponse: HttpResponse = client.get(EndPoints.MOVIE_POPULAR) {
-            pathUrl(EndPoints.MOVIE_POPULAR)
+    override suspend fun getMovies(
+        page: Int,
+        moviesFilter: MoviesFilter
+    ): ApiResponse<Pagination<Movie>> {
+        val url = when (moviesFilter) {
+            MoviesFilter.POPULAR -> EndPoints.MOVIE_POPULAR
+            MoviesFilter.TOP_RATED -> EndPoints.MOVIE_TOP_RATED
+            MoviesFilter.NOW_PLAYING -> EndPoints.MOVIE_NOW_PLAYING
+            MoviesFilter.UPCOMING -> EndPoints.MOVIE_UPCOMING
+        }
+        val httpResponse: HttpResponse = client.get {
+            pathUrl(url)
             parameter("page", page)
         }
         return if (httpResponse.status.value in 200..299) {

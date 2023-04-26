@@ -22,10 +22,11 @@ object CoilModule {
     @Singleton
     fun provideImageLoader(app: Application): ImageLoader {
         return ImageLoader.Builder(app)
-            .error(R.drawable.ic_movie)
-            .placeholder(R.drawable.ic_movie)
+            .error(com.mhmd.components.R.drawable.ic_movie)
+            .placeholder(com.mhmd.components.R.drawable.ic_movie)
             .memoryCache { MemoryCache.Builder(app.applicationContext).maxSizePercent(0.25).build() } // Don't know what is recommended?
             .crossfade(true)
+            .crossfade(1000)
             .build()
     }
 }

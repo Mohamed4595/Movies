@@ -11,14 +11,14 @@ data class MovieDto(
     val title: String,
     val overview: String,
     @SerialName("poster_path")
-    val posterImage: String,
+    val posterImage: String?=null,
     @SerialName("release_date")
-    val releaseDate: String,
-    val popularity: Double,
+    val releaseDate: String?=null,
+    val popularity: Double?=null,
     @SerialName("vote_count")
-    val voteCount: Int,
+    val voteCount: Int?=null,
     @SerialName("vote_average")
-    val voteAverage: Double
+    val voteAverage: Double?=null
 )
 
 fun MovieDto.toMovie(): Movie {

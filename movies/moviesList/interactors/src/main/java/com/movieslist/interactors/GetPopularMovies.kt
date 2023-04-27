@@ -23,7 +23,7 @@ class GetPopularMovies(private val service: MoviesService) {
                     is ApiResponse.Fail -> {
                         emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
                         emit(
-                            DataState.Response(
+                            DataState.Error(
                                 uiComponent = UIComponent.Dialog(
                                     title = "Network Data Error",
                                     description = result.response.message.toString()
@@ -36,7 +36,7 @@ class GetPopularMovies(private val service: MoviesService) {
 
                     is ApiResponse.Success -> {
                         emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
-                        emit(DataState.Data(result.data))
+                        emit(DataState.Success(result.data))
                     }
                 }
 
@@ -44,7 +44,7 @@ class GetPopularMovies(private val service: MoviesService) {
                 e.printStackTrace() // log to crashlytics?
                 emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
                 emit(
-                    DataState.Response(
+                    DataState.Error(
                         uiComponent = UIComponent.Dialog(
                             title = "Network Data Error",
                             description = e.message ?: "Unknown error"

@@ -11,8 +11,4 @@ sealed class MoviesListEvents {
     data class OnSelectMoviesFilter(
         val moviesFilter: MoviesFilter
     ) : MoviesListEvents()
-
-    data class Error(
-        val uiComponent: UIComponent
-    ) : MoviesListEvents()
 }

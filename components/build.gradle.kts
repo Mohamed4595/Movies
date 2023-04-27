@@ -45,7 +45,7 @@ android {
 
 dependencies {
     implementation(project(Modules.core))
-
+    implementation(project(Modules.constants))
     implementation(Coil.coil)
 
     implementation(AndroidX.coreKtx)

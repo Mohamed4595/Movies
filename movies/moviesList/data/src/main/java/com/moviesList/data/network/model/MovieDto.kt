@@ -1,24 +1,25 @@
 package com.moviesList.data.network.model
 
 import com.mhmd.constants.ImageConstants
+import com.mhmd.core.util.toLocalDate
 import com.moviesList.domain.Movie
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class MovieDto(
-    val id: Int,
+    val id: Long,
     val title: String,
     val overview: String,
     @SerialName("poster_path")
-    val posterImage: String?=null,
+    val posterImage: String? = null,
     @SerialName("release_date")
-    val releaseDate: String?=null,
-    val popularity: Double?=null,
+    val releaseDate: String? = null,
+    val popularity: Double? = null,
     @SerialName("vote_count")
-    val voteCount: Int?=null,
+    val voteCount: Int? = null,
     @SerialName("vote_average")
-    val voteAverage: Double?=null
+    val voteAverage: Double? = null
 )
 
 fun MovieDto.toMovie(): Movie {
@@ -27,7 +28,7 @@ fun MovieDto.toMovie(): Movie {
         title = title,
         overview = overview,
         posterImage = ImageConstants.POSTER_IMAGE_URL + posterImage,
-        releaseDate = releaseDate,
+        releaseDate = releaseDate?.toLocalDate(),
         popularity = popularity,
         voteCount = voteCount,
         voteAverage = voteAverage

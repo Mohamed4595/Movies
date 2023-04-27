@@ -7,19 +7,25 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import coil.ImageLoader
 import com.google.accompanist.navigation.animation.composable
+import com.mhmd.constants.NavigationArgumentsConstants
+import com.moviedetails.presentation.ui.MovieDetailsScreen
+import com.moviedetails.presentation.ui.MovieDetailsViewModel
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalAnimationApi
-fun NavGraphBuilder.addMoviesDetail(
+fun NavGraphBuilder.addMovieDetails(
     imageLoader: ImageLoader,
     width: Int,
 ) {
     composable(
-        route = Screen.MoviesDetail.route + "/{movieId}",
-        arguments = Screen.MoviesDetail.arguments,
+        route = Screen.MovieDetails.route + "/{${NavigationArgumentsConstants.MOVIE_ID}}",
+        arguments = Screen.MovieDetails.arguments,
         enterTransition = {
             slideInHorizontally(
                 initialOffsetX = { width },
@@ -39,8 +45,11 @@ fun NavGraphBuilder.addMoviesDetail(
             ) + fadeOut(animationSpec = tween(300))
         }
     ) {
-//        MoviesDetails(
-//            imageLoader = imageLoader
-//        )
+        val viewModel: MovieDetailsViewModel = hiltViewModel()
+        MovieDetailsScreen(
+            uiState = viewModel.state.value,
+            events = viewModel::onTriggerEvent,
+            imageLoader = imageLoader,
+        )
     }
 }

@@ -1,6 +1,5 @@
-package com.moviesList.data.network.model
+package com.mhmd.core.domain
 
-import com.mhmd.core.domain.FailedResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

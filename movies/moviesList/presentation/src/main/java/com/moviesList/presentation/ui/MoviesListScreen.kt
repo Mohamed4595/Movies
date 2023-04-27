@@ -5,10 +5,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import com.mhmd.components.AppBarDivider
 import com.mhmd.components.DefaultScreenUI
@@ -19,7 +22,7 @@ import com.mhmd.components.R
 import com.mhmd.core.domain.ProgressBarState
 import com.mhmd.core.domain.UiState
 import com.moviesList.domain.Movie
-import com.moviesList.presentation.components.MovieListItem
+import com.mhmd.components.MovieCard
 import com.moviesList.presentation.components.MoviesFilter
 
 @ExperimentalComposeUiApi
@@ -31,6 +34,9 @@ fun MoviesListScreen(
     navigateToDetailScreen: (Movie) -> Unit,
     imageLoader: ImageLoader
 ) {
+    val configuration = LocalConfiguration.current
+
+    val screenHeight = configuration.screenHeightDp.dp
     DefaultScreenUI(
         queue = when (uiState) {
             is UiState.Error -> uiState.state.errorQueue
@@ -65,10 +71,12 @@ fun MoviesListScreen(
                                 events(MoviesListEvents.GetNextPageMovies)
                             },
                             content = { item, _ ->
-                                MovieListItem(
-                                    movie = item,
+                                MovieCard(
+                                    modifier = Modifier.height(screenHeight/3),
+                                    moviePoster = item.posterImage,
+                                    voteAverage = item.voteAverage,
                                     onMovieClick = {
-                                        navigateToDetailScreen(it)
+                                        navigateToDetailScreen(item)
                                     },
                                     imageLoader = imageLoader
                                 )

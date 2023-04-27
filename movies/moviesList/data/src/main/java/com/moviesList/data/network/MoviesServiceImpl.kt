@@ -2,10 +2,10 @@ package com.moviesList.data.network
 
 import com.mhmd.constants.NetworkConstants
 import com.mhmd.core.domain.ApiResponse
-import com.moviesList.data.network.model.FailedResponseDto
+import com.mhmd.core.domain.FailedResponseDto
+import com.mhmd.core.domain.toFailedResponse
 import com.moviesList.data.network.model.MovieDto
 import com.moviesList.data.network.model.PaginationDto
-import com.moviesList.data.network.model.toFailedResponse
 import com.moviesList.data.network.model.toMovie
 import com.moviesList.data.network.model.toPagination
 import com.moviesList.domain.Movie

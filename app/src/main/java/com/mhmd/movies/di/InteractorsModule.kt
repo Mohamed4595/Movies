@@ -1,5 +1,7 @@
 package com.mhmd.movies.di
 
+import com.moviedetails.data.network.MovieDetailsService
+import com.moviedetails.interactors.GetMovieDetails
 import com.moviesList.data.network.MoviesService
 import com.movieslist.interactors.GetPopularMovies
 import dagger.Module
@@ -19,6 +21,16 @@ object InteractorsModule {
     ): GetPopularMovies {
         return GetPopularMovies(
             service = moviesService
+        )
+    }
+
+    @ViewModelScoped
+    @Provides
+    fun provideMovieDetails(
+        movieDetailsService: MovieDetailsService
+    ): GetMovieDetails {
+        return GetMovieDetails(
+            service = movieDetailsService
         )
     }
 }

@@ -23,7 +23,7 @@ import com.mhmd.core.domain.UIComponent
 @Composable
 fun DefaultScreenUI(
     queue: Queue<UIComponent> = Queue(mutableListOf()),
-    onRemoveHeadFromQueue: () -> Unit,
+    onRemoveHeadFromQueue: () -> Unit={},
     progressBarState: ProgressBarState = ProgressBarState.Idle,
     content: @Composable () -> Unit,
 ){

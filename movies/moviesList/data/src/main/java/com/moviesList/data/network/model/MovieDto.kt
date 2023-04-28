@@ -5,6 +5,7 @@ import com.mhmd.core.util.toLocalDate
 import com.moviesList.domain.Movie
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.math.roundToInt
 
 @Serializable
 data class MovieDto(
@@ -31,6 +32,6 @@ fun MovieDto.toMovie(): Movie {
         releaseDate = releaseDate?.toLocalDate(),
         popularity = popularity,
         voteCount = voteCount,
-        voteAverage = voteAverage
+        voteAverage = voteAverage?.let { (voteAverage * 10.0).roundToInt() / 10.0 }?:0.0
     )
 }

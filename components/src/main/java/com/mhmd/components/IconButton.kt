@@ -1,6 +1,7 @@
 package com.mhmd.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ fun IconButton(
     iconRes: Int,
     modifier: Modifier = Modifier,
     iconColor: Color? = null,
+    backgroundColor: Color = Color.Transparent,
     iconSize:Int = 32,
     onClick: () -> Unit
 ) {
@@ -36,7 +38,7 @@ fun IconButton(
             )
             .clickable {
                 onClick()
-            }
+            }.background(backgroundColor)
             .padding(6.dp),
     )
 }

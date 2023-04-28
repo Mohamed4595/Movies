@@ -19,9 +19,6 @@ fun MovieCover(
     coverUrl: String?,
     imageLoader: ImageLoader
 ) {
-    val configuration = LocalConfiguration.current
-
-    val screenHeight = configuration.screenHeightDp.dp
     val painter = rememberAsyncImagePainter(
         ImageRequest
             .Builder(LocalContext.current)
@@ -30,8 +27,7 @@ fun MovieCover(
     )
     Image(
         modifier = modifier
-            .fillMaxWidth()
-            .height(screenHeight/5),
+            .fillMaxWidth(),
         painter = painter,
         contentDescription = null,
         contentScale = ContentScale.Crop,

@@ -48,6 +48,7 @@ dependencies {
 
     implementation(project(Modules.movieDetailsDomain))
     implementation(project(Modules.movieDetailsInteractors))
+    implementation(project(Modules.moviesListDomain))
 
     implementation(Coil.coil)
 
@@ -62,6 +63,7 @@ dependencies {
     implementation(Compose.navigation)
 
     implementation(Google.material)
+    implementation(Kotlinx.coroutinesCore)
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)

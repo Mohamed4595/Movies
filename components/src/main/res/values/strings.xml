@@ -15,4 +15,7 @@
     <string name="upcoming">Upcoming</string>
     <string name="type">Type</string>
     <string name="production_companies">Production Companies</string>
+    <string name="duration_time">Duration</string>
+    <string name="similar_movies">Similar Movies</string>
+    <string name="recommendations">Recommendations</string>
 </resources>

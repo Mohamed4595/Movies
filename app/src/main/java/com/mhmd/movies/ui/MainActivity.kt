@@ -42,6 +42,7 @@ class MainActivity : ComponentActivity() {
                             )
                             addMovieDetails(
                                 imageLoader = imageLoader,
+                                navController = navController,
                                 width = constraints.maxWidth / 2,
                             )
                         }

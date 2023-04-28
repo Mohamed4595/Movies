@@ -9,6 +9,7 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import coil.ImageLoader
 import com.google.accompanist.navigation.animation.composable
@@ -21,6 +22,7 @@ import com.moviedetails.presentation.ui.MovieDetailsViewModel
 @ExperimentalAnimationApi
 fun NavGraphBuilder.addMovieDetails(
     imageLoader: ImageLoader,
+    navController: NavController,
     width: Int,
 ) {
     composable(
@@ -49,6 +51,9 @@ fun NavGraphBuilder.addMovieDetails(
         MovieDetailsScreen(
             uiState = viewModel.state.value,
             events = viewModel::onTriggerEvent,
+            onBack = {
+                navController.navigateUp()
+            },
             imageLoader = imageLoader,
         )
     }

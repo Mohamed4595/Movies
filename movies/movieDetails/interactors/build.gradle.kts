@@ -10,6 +10,7 @@ dependencies {
     "implementation"(project(Modules.core))
     "implementation"(project(Modules.movieDetailsData))
     "implementation"(project(Modules.movieDetailsDomain))
+    "implementation"(project(Modules.moviesListDomain))
 
     "implementation"(Kotlinx.coroutinesCore) // need for flows
 

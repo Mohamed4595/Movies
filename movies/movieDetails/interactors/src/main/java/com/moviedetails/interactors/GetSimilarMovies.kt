@@ -1,27 +1,25 @@
-package com.movieslist.interactors
+package com.moviedetails.interactors
 
 import com.mhmd.core.domain.ApiResponse
 import com.mhmd.core.domain.DataState
+import com.mhmd.core.domain.Pagination
 import com.mhmd.core.domain.ProgressBarState
 import com.mhmd.core.domain.UIComponent
-import com.moviesList.data.network.MoviesService
+import com.moviedetails.data.network.MovieDetailsService
 import com.moviesList.domain.Movie
-import com.moviesList.domain.MoviesFilter
-import com.mhmd.core.domain.Pagination
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class GetPopularMovies(private val service: MoviesService) {
+class GetSimilarMovies(private val service: MovieDetailsService) {
 
-    fun execute(page: Int, selectedMoviesFilter: MoviesFilter): Flow<DataState<Pagination<Movie>>> =
+    fun execute(page: Int, movieId: Long): Flow<DataState<Pagination<Movie>>> =
         flow {
-
-            emit(DataState.Loading(progressBarState = ProgressBarState.Loading))
+            emit(DataState.Success(Pagination<Movie>(page=0, results = emptyList(), totalResults = 0, totalPages = 0)))
 
             try {
-                when (val result = service.getMovies(page, selectedMoviesFilter)) {
+                when (val result =
+                    service.getSimilarMovies(movieId = movieId, page = page)) {
                     is ApiResponse.Fail -> {
-                        emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
                         emit(
                             DataState.Error(
                                 uiComponent = UIComponent.Dialog(
@@ -42,7 +40,6 @@ class GetPopularMovies(private val service: MoviesService) {
 
             } catch (e: Exception) {
                 e.printStackTrace() // log to crashlytics?
-                emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
                 emit(
                     DataState.Error(
                         uiComponent = UIComponent.Dialog(

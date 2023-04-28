@@ -1,7 +1,6 @@
 package com.mhmd.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,44 +32,44 @@ fun <T> List<T>.PaginatedLazyColumn(
 
 
     val contentList = this
-    Column {
-        if (showEmptyView && contentList.isEmpty())
-            LazyColumn(
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start,
-                modifier = modifier
-            ) {
-                item { EmptyView(modifier = modifier) }
+    if (showEmptyView && contentList.isEmpty())
+        LazyColumn(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier
+        ) {
+            item { EmptyView(modifier = modifier) }
+        }
+    else
+        LazyColumn(
+            modifier = modifier,
+            state = listState,
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start,
+        ) {
+            itemsIndexed(contentList) { index, element ->
+                Row(Modifier.padding(contentPadding)) {
+                    this@LazyColumn.content(element, index)
+                }
             }
-        else
-            LazyColumn(
-                modifier = modifier,
-                state = listState,
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start,
-            ) {
-                itemsIndexed(contentList) { index, element ->
-                    Row(Modifier.padding(contentPadding)) {
-                        this@LazyColumn.content(element, index)
+            item {
+                val isScrollToEnd by remember {
+                    derivedStateOf {
+                        (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == listState.layoutInfo.totalItemsCount - 1)
+                                && listState.isScrollInProgress
                     }
                 }
-                item {
-                    val isScrollToEnd by remember {
-                        derivedStateOf {
-                            (listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == listState.layoutInfo.totalItemsCount - 1)
-                                    && listState.isScrollInProgress
-                        }
-                    }
-                    if (isScrollToEnd && canLoadMore) {
-                        LoadingItem(
-                            Modifier.fillMaxWidth()
+                if (isScrollToEnd && canLoadMore) {
+                    LoadingItem(
+                        Modifier
+                            .fillMaxWidth()
                             .padding(16.dp)
-                        )
-                        Spacer(modifier = Modifier.height(32.dp))
-                        onLoadMore.invoke()
-                    }
+                    )
+                    Spacer(modifier = Modifier.height(32.dp))
+                    onLoadMore.invoke()
                 }
             }
-    }
+        }
+
 
 }

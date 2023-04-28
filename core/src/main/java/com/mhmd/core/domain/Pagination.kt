@@ -1,4 +1,4 @@
-package com.moviesList.domain
+package com.mhmd.core.domain
 
 data class Pagination<T>(
     val totalResults: Int?,

@@ -18,4 +18,5 @@
     <string name="duration_time">Duration</string>
     <string name="similar_movies">Similar Movies</string>
     <string name="recommendations">Recommendations</string>
+    <string name="trailers">Trailers</string>
 </resources>

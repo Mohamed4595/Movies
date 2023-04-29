@@ -75,6 +75,7 @@ dependencies {
     implementation(Compose.ui)
     implementation(Compose.material)
     implementation(Compose.tooling)
+    implementation(Compose.util)
     implementation(Compose.navigation)
     implementation(Compose.hiltNavigation)
 
@@ -87,6 +88,8 @@ dependencies {
     implementation(Ktor.core)
     implementation(Ktor.clientSerialization)
     implementation(Ktor.android)
+
+    implementation(YoutubePlayer.player)
 
     androidTestImplementation(AndroidXTest.runner)
     androidTestImplementation(ComposeTest.uiTestJunit4)

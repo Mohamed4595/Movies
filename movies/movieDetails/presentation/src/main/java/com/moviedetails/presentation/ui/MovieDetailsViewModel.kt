@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.mhmd.constants.NavigationArgumentsConstants
 import com.mhmd.core.domain.DataState
 import com.mhmd.core.domain.ProgressBarState
+import com.mhmd.core.domain.Queue
 import com.mhmd.core.domain.UIComponent
 import com.mhmd.core.domain.UiState
 import com.mhmd.core.util.Logger
@@ -70,21 +71,41 @@ constructor(
                 getNextSimilarMovies()
 
             }
+
+            is MovieDetailsEvents.OnVideoChanged -> {
+                val currentState = getCurrentState()
+                state.value = UiState.Success(
+                    state = currentState.copy(isVideoChanged = event.flag)
+                )
+
+            }
+
+            is MovieDetailsEvents.SetCurrentVideo -> {
+                val currentState = getCurrentState()
+                val map = currentState.initializedYouTubePlayer.toMutableMap()
+                map[event.page] = event.youTubePlayer
+                state.value = UiState.Success(
+                    state = currentState.copy(
+                        initializedYouTubePlayer = map,
+                        isVideoChanged = false
+                    )
+                )
+            }
         }
     }
 
     private fun getMovieDetails(movieId: Long) {
-        val currentState = getCurrentState()
         state.value = UiState.Loading(
             progressBarState = ProgressBarState.Loading,
             state = MovieDetailsState()
         )
+        val currentState = getCurrentState()
         getMovieDetails.execute(movieId)
             .onEach { dataState ->
                 when (dataState) {
                     is DataState.Loading -> {
                         state.value = UiState.Loading(
-                            progressBarState = ProgressBarState.Loading,
+                            progressBarState = dataState.progressBarState,
                             state = currentState
                         )
                     }
@@ -97,12 +118,11 @@ constructor(
                                 )
                             )
                         getMovieVideos(movieId)
-                        getRecommendationsMovies(movieId)
-                        getSimilarMovies(movieId)
+
                     }
 
                     is DataState.Error -> {
-                        UiState.Error(
+                        state.value = UiState.Error(
                             errorMessage = when (val uiComponent = dataState.uiComponent) {
                                 is UIComponent.None -> uiComponent.message
                                 is UIComponent.Dialog -> uiComponent.title + "\n" + uiComponent.description
@@ -120,12 +140,7 @@ constructor(
         getSimilarMovies.execute(movieId = movieId, page = 1)
             .onEach { dataState ->
                 when (dataState) {
-                    is DataState.Loading -> {
-                        state.value = UiState.Loading(
-                            progressBarState = ProgressBarState.Loading,
-                            state = currentState
-                        )
-                    }
+                    is DataState.Loading -> {}
 
                     is DataState.Success -> {
                         state.value =
@@ -134,6 +149,8 @@ constructor(
                                     paginationSimilarMovies = dataState.data,
                                 )
                             )
+                        getRecommendationsMovies(movieId)
+
                     }
 
                     is DataState.Error -> {
@@ -144,7 +161,7 @@ constructor(
                             },
                             state = currentState
                         )
-
+                        getRecommendationsMovies(movieId)
                     }
                 }
             }.launchIn(viewModelScope)
@@ -196,12 +213,7 @@ constructor(
         getRecommendationsMovies.execute(movieId = movieId, page = 1)
             .onEach { dataState ->
                 when (dataState) {
-                    is DataState.Loading -> {
-                        state.value = UiState.Loading(
-                            progressBarState = ProgressBarState.Loading,
-                            state = currentState
-                        )
-                    }
+                    is DataState.Loading -> {}
 
                     is DataState.Success -> {
                         state.value =
@@ -236,9 +248,7 @@ constructor(
                     (currentState.paginationRecommendationsMovies?.page ?: 0) + 1
                 ).onEach { dataState ->
                     when (dataState) {
-                        is DataState.Loading -> {
-
-                        }
+                        is DataState.Loading -> {}
 
                         is DataState.Success -> {
                             val newRecommendations =
@@ -275,30 +285,30 @@ constructor(
         getMovieVideos.execute(movieId)
             .onEach { dataState ->
                 when (dataState) {
-                    is DataState.Loading -> {
-                        state.value = UiState.Loading(
-                            progressBarState = ProgressBarState.Loading,
-                            state = currentState
-                        )
-                    }
+                    is DataState.Loading -> {}
 
                     is DataState.Success -> {
                         state.value =
                             UiState.Success(
                                 state = currentState.copy(
-                                    movieVideos = dataState.data ?: emptyList()
+                                    movieVideos = dataState.data ?: emptyList(),
                                 )
                             )
+                        getSimilarMovies(movieId)
                     }
 
                     is DataState.Error -> {
-                        UiState.Error(
-                            errorMessage = when (val uiComponent = dataState.uiComponent) {
-                                is UIComponent.None -> uiComponent.message
-                                is UIComponent.Dialog -> uiComponent.title + "\n" + uiComponent.description
-                            },
-                            state = currentState
-                        )
+                        state.value =
+                            UiState.Success(
+                                state = currentState.copy(
+                                    movieVideos = emptyList(),
+                                )
+                            )
+                        when (val uiComponent = dataState.uiComponent) {
+                            is UIComponent.None -> logger.log("getMovieVideos: ${uiComponent.message}")
+                            else -> appendToMessageQueue(uiComponent)
+                        }
+                        getSimilarMovies(movieId)
 
                     }
                 }
@@ -308,24 +318,41 @@ constructor(
     private fun appendToMessageQueue(uiComponent: UIComponent) {
         val currentState = getCurrentState()
         val queue = currentState.errorQueue
-        queue.add(uiComponent)
-        state.value = when (state.value) {
-            is UiState.Error -> {
-                UiState.Error(
-                    errorMessage = "",
-                    state = currentState.copy(errorQueue = queue)
-                )
+        if (!queue.items.contains(uiComponent)) {
+            queue.add(uiComponent)
+            when (state.value) {
+                is UiState.Error -> {
+                    state.value = UiState.Error(
+                        errorMessage = "",
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Error(
+                        errorMessage = "",
+                        state = currentState.copy(errorQueue = queue)
+                    )
+
+                }
+
+                is UiState.Loading -> {
+                    state.value = UiState.Loading(
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Loading(
+                        state = currentState.copy(errorQueue = queue)
+                    )
+
+                }
+
+                is UiState.Success -> {
+                    state.value = UiState.Success(
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Success(
+                        state = currentState.copy(errorQueue = queue)
+                    )
+                }
             }
-
-            is UiState.Loading -> UiState.Loading(
-                state = currentState.copy(errorQueue = queue)
-            )
-
-            is UiState.Success -> UiState.Success(
-                state = currentState.copy(errorQueue = queue)
-            )
         }
-
     }
 
     private fun removeHeadMessage() {
@@ -333,21 +360,37 @@ constructor(
         val queue = currentState.errorQueue
         if (!queue.isEmpty()) {
             queue.remove()
-            state.value = when (state.value) {
+            when (state.value) {
                 is UiState.Error -> {
-                    UiState.Error(
+                    state.value = UiState.Error(
+                        errorMessage = "",
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Error(
                         errorMessage = "",
                         state = currentState.copy(errorQueue = queue)
                     )
+
                 }
 
-                is UiState.Loading -> UiState.Loading(
-                    state = currentState.copy(errorQueue = queue)
-                )
+                is UiState.Loading -> {
+                    state.value = UiState.Loading(
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Loading(
+                        state = currentState.copy(errorQueue = queue)
+                    )
 
-                is UiState.Success -> UiState.Success(
-                    state = currentState.copy(errorQueue = queue)
-                )
+                }
+
+                is UiState.Success -> {
+                    state.value = UiState.Success(
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Success(
+                        state = currentState.copy(errorQueue = queue)
+                    )
+                }
             }
         }
 

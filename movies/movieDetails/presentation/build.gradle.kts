@@ -60,6 +60,7 @@ dependencies {
     implementation(Compose.ui)
     implementation(Compose.material)
     implementation(Compose.tooling)
+    implementation(Compose.util)
     implementation(Compose.navigation)
 
     implementation(Google.material)
@@ -67,4 +68,6 @@ dependencies {
 
     implementation(Hilt.android)
     kapt(Hilt.compiler)
+
+    implementation(YoutubePlayer.player)
 }

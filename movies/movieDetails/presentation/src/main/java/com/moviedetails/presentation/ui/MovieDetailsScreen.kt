@@ -28,9 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import com.mhmd.components.DefaultScreenUI
 import com.mhmd.components.EmptyView
-import com.mhmd.components.GrayTransparentColor
 import com.mhmd.components.IconButton
-import com.mhmd.components.LightColorSurface
 import com.mhmd.components.MovieCard
 import com.mhmd.components.R
 import com.mhmd.core.domain.ProgressBarState
@@ -40,6 +38,7 @@ import com.moviedetails.presentation.components.GenresSection
 import com.moviedetails.presentation.components.HorizontalMoviesSection
 import com.moviedetails.presentation.components.MovieCover
 import com.moviedetails.presentation.components.MovieTitleSection
+import com.moviedetails.presentation.components.MovieVideos
 import com.moviedetails.presentation.components.ProductionCompaniesSection
 
 @ExperimentalComposeUiApi
@@ -89,7 +88,7 @@ fun MovieDetailsScreen(
                     .fillMaxSize()
             ) {
                 if (uiState is UiState.Error) {
-                    EmptyView(message = uiState.errorMessage)
+                    EmptyView(modifier = Modifier.fillMaxHeight(), message = uiState.errorMessage)
                 }
                 if (uiState is UiState.Success) {
                     val movieDetails = uiState.state.movieDetails
@@ -141,16 +140,35 @@ fun MovieDetailsScreen(
                                                 GenresSection(genres = movieDetails.genres)
                                             }
 
-                                        item {
-                                            DurationSection(duration = movieDetails.runtime)
-                                        }
-
+                                        if (movieDetails.runtime != 0L)
+                                            item {
+                                                DurationSection(duration = movieDetails.runtime)
+                                            }
+                                        if (uiState.state.movieVideos.isNotEmpty())
+                                            item {
+                                                MovieVideos(
+                                                    videos = uiState.state.movieVideos,
+                                                    initializedYouTubePlayer = uiState.state.initializedYouTubePlayer,
+                                                    isChanged = uiState.state.isVideoChanged,
+                                                    onVideoChanged = {
+                                                        events(
+                                                            MovieDetailsEvents.OnVideoChanged(it)
+                                                        )
+                                                    }
+                                                ) { page, player ->
+                                                    events(
+                                                        MovieDetailsEvents.SetCurrentVideo(
+                                                            page,
+                                                            player
+                                                        )
+                                                    )
+                                                }
+                                            }
 
                                         if (movieDetails.productionCompanies.isNotEmpty())
                                             item {
                                                 ProductionCompaniesSection(
                                                     productionCompanies = movieDetails.productionCompanies,
-                                                    imageLoader = imageLoader
                                                 )
                                             }
 

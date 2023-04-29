@@ -9,8 +9,10 @@ import com.mhmd.core.domain.toFailedResponse
 import com.mhmd.core.domain.toPagination
 import com.moviedetails.data.network.model.MovieDetailsDto
 import com.moviedetails.data.network.model.VideoDto
+import com.moviedetails.data.network.model.VideoResponseDto
 import com.moviedetails.data.network.model.toMovieDetails
 import com.moviedetails.data.network.model.toVideo
+import com.moviedetails.data.network.model.toVideoLis
 import com.moviedetails.domain.MovieDetails
 import com.moviedetails.domain.Video
 import com.moviesList.data.network.model.MovieDto
@@ -43,8 +45,8 @@ class MovieDetailsServiceImpl(private val client: HttpClient) : MovieDetailsServ
             pathUrl(EndPoints.movieVideos(movieId))
         }
         return if (httpResponse.status.value in 200..299) {
-            val response: List<VideoDto> = httpResponse.receive()
-            ApiResponse.Success(response.mapNotNull { it.toVideo() })
+            val response: VideoResponseDto = httpResponse.receive()
+            ApiResponse.Success(response.toVideoLis())
         } else {
             val response: FailedResponseDto = httpResponse.receive()
             ApiResponse.Fail(response.toFailedResponse())

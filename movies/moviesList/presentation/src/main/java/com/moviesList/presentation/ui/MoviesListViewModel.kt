@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mhmd.core.domain.DataState
 import com.mhmd.core.domain.ProgressBarState
+import com.mhmd.core.domain.Queue
 import com.mhmd.core.domain.UIComponent
 import com.mhmd.core.domain.UiState
 import com.mhmd.core.util.Logger
@@ -66,7 +67,7 @@ constructor(
                 when (dataState) {
                     is DataState.Loading -> {
                         state.value = UiState.Loading(
-                            progressBarState = ProgressBarState.Loading,
+                            progressBarState = dataState.progressBarState,
                             state = currentState
                         )
                     }
@@ -82,7 +83,7 @@ constructor(
                     }
 
                     is DataState.Error -> {
-                        UiState.Error(
+                        state.value = UiState.Error(
                             errorMessage = when (val uiComponent = dataState.uiComponent) {
                                 is UIComponent.None -> uiComponent.message
                                 is UIComponent.Dialog -> uiComponent.title + "\n" + uiComponent.description
@@ -142,22 +143,40 @@ constructor(
     private fun appendToMessageQueue(uiComponent: UIComponent) {
         val currentState = getCurrentState()
         val queue = currentState.errorQueue
-        queue.add(uiComponent)
-        state.value = when (state.value) {
-            is UiState.Error -> {
-                UiState.Error(
-                    errorMessage = "",
-                    state = currentState.copy(errorQueue = queue)
-                )
+        if (!queue.items.contains(uiComponent)) {
+            queue.add(uiComponent)
+            when (state.value) {
+                is UiState.Error -> {
+                    state.value = UiState.Error(
+                        errorMessage = "",
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Error(
+                        errorMessage = "",
+                        state = currentState.copy(errorQueue = queue)
+                    )
+
+                }
+
+                is UiState.Loading -> {
+                    state.value = UiState.Loading(
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Loading(
+                        state = currentState.copy(errorQueue = queue)
+                    )
+
+                }
+
+                is UiState.Success -> {
+                    state.value = UiState.Success(
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Success(
+                        state = currentState.copy(errorQueue = queue)
+                    )
+                }
             }
-
-            is UiState.Loading -> UiState.Loading(
-                state = currentState.copy(errorQueue = queue)
-            )
-
-            is UiState.Success -> UiState.Success(
-                state = currentState.copy(errorQueue = queue)
-            )
         }
 
     }
@@ -167,21 +186,37 @@ constructor(
         val queue = currentState.errorQueue
         if (!queue.isEmpty()) {
             queue.remove()
-            state.value = when (state.value) {
+            when (state.value) {
                 is UiState.Error -> {
-                    UiState.Error(
+                    state.value = UiState.Error(
+                        errorMessage = "",
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Error(
                         errorMessage = "",
                         state = currentState.copy(errorQueue = queue)
                     )
+
                 }
 
-                is UiState.Loading -> UiState.Loading(
-                    state = currentState.copy(errorQueue = queue)
-                )
+                is UiState.Loading -> {
+                    state.value = UiState.Loading(
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Loading(
+                        state = currentState.copy(errorQueue = queue)
+                    )
 
-                is UiState.Success -> UiState.Success(
-                    state = currentState.copy(errorQueue = queue)
-                )
+                }
+
+                is UiState.Success -> {
+                    state.value = UiState.Success(
+                        state = currentState.copy(errorQueue = Queue(mutableListOf()))
+                    )
+                    state.value = UiState.Success(
+                        state = currentState.copy(errorQueue = queue)
+                    )
+                }
             }
         }
 

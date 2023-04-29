@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
@@ -58,7 +59,7 @@ fun MoviesListScreen(
                     isDivider = uiState !is UiState.Success
                 )
                 if (uiState is UiState.Error){
-                    EmptyView(message = uiState.errorMessage)
+                    EmptyView(modifier=Modifier.fillMaxHeight(),message = uiState.errorMessage)
                 }
                 if (uiState is UiState.Success) {
                     MoviesFilter(state = uiState.state, events = events)

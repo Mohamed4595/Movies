@@ -7,7 +7,7 @@ import com.mhmd.core.domain.UIComponent
 import com.moviesList.data.network.MoviesService
 import com.moviesList.domain.Movie
 import com.moviesList.domain.MoviesFilter
-import com.moviesList.domain.Pagination
+import com.mhmd.core.domain.Pagination
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
@@ -23,7 +23,7 @@ class GetPopularMovies(private val service: MoviesService) {
                     is ApiResponse.Fail -> {
                         emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
                         emit(
-                            DataState.Response(
+                            DataState.Error(
                                 uiComponent = UIComponent.Dialog(
                                     title = "Network Data Error",
                                     description = result.response.message.toString()
@@ -36,7 +36,7 @@ class GetPopularMovies(private val service: MoviesService) {
 
                     is ApiResponse.Success -> {
                         emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
-                        emit(DataState.Data(result.data))
+                        emit(DataState.Success(result.data))
                     }
                 }
 
@@ -44,7 +44,7 @@ class GetPopularMovies(private val service: MoviesService) {
                 e.printStackTrace() // log to crashlytics?
                 emit(DataState.Loading(progressBarState = ProgressBarState.Idle))
                 emit(
-                    DataState.Response(
+                    DataState.Error(
                         uiComponent = UIComponent.Dialog(
                             title = "Network Data Error",
                             description = e.message ?: "Unknown error"

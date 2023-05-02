@@ -45,7 +45,7 @@ android {
 
 dependencies {
     implementation(project(Modules.core))
-
+    implementation(project(Modules.constants))
     implementation(Coil.coil)
 
     implementation(AndroidX.coreKtx)
@@ -56,6 +56,7 @@ dependencies {
     implementation(Compose.ui)
     implementation(Compose.material)
     implementation(Compose.tooling)
+    implementation(Compose.util)
     implementation(Compose.navigation)
 
     implementation(Google.material)

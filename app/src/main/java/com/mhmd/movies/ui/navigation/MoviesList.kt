@@ -46,9 +46,10 @@ fun NavGraphBuilder.addMoviesList(
     ) {
         val viewModel: MoviesListViewModel = hiltViewModel()
         MoviesListScreen(
-            state = viewModel.state.value,
+            uiState = viewModel.state.value,
             events = viewModel::onTriggerEvent,
             navigateToDetailScreen = {
+                navController.navigate("${Screen.MovieDetails.route}/${it.id}")
             },
             imageLoader = imageLoader,
         )

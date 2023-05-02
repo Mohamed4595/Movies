@@ -1,5 +1,7 @@
 package com.mhmd.movies.di
 
+import com.moviedetails.data.network.MovieDetailsService
+import com.moviedetails.data.network.MovieDetailsServiceImpl
 import com.moviesList.data.network.MoviesService
 import com.moviesList.data.network.MoviesServiceImpl
 import dagger.Module
@@ -22,6 +24,14 @@ object NetworkModule {
         httpClient: HttpClient
     ): MoviesService {
         return MoviesServiceImpl(httpClient)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMovieDetailsService(
+        httpClient: HttpClient
+    ): MovieDetailsService {
+        return MovieDetailsServiceImpl(httpClient)
     }
 
     @Singleton

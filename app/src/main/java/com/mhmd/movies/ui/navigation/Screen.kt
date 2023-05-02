@@ -3,6 +3,7 @@ package com.mhmd.movies.ui.navigation
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.mhmd.constants.NavigationArgumentsConstants
 
 sealed class Screen(val route: String, val arguments: List<NamedNavArgument>) {
 
@@ -11,10 +12,10 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument>) {
         arguments = emptyList()
     )
 
-    object MoviesDetail : Screen(
-        route = "moviesDetail",
-        arguments = listOf(navArgument("movieId") {
-            type = NavType.IntType
+    object MovieDetails : Screen(
+        route = "movieDetails",
+        arguments = listOf(navArgument(NavigationArgumentsConstants.MOVIE_ID) {
+            type = NavType.LongType
         })
     )
 }

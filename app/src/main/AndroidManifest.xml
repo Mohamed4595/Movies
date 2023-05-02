@@ -28,6 +28,7 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:screenOrientation="nosensor"/>
 
     </application>

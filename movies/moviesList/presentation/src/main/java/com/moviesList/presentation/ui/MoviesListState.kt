@@ -8,7 +8,6 @@ import com.moviesList.domain.MoviesFilter
 
 
 data class MoviesListState(
-    val progressBarState: ProgressBarState = ProgressBarState.Idle,
     val movies: List<Movie> = listOf(),
     val isLoadingNextPage: ProgressBarState = ProgressBarState.Idle,
     val selectedMoviesFilter: MoviesFilter = MoviesFilter.POPULAR,

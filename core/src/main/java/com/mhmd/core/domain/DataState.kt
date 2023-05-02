@@ -2,11 +2,11 @@ package com.mhmd.core.domain
 
 sealed class DataState<T> {
 
-    data class Response<T>(
+    data class Error<T>(
         val uiComponent: UIComponent
     ): DataState<T>()
 
-    data class Data<T>(
+    data class Success<T>(
         val data: T? = null
     ): DataState<T>()
 

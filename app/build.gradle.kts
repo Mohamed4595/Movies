@@ -51,15 +51,17 @@ dependencies {
 
     implementation(project(Modules.core))
     implementation(project(Modules.components))
+    implementation(project(Modules.constants)) 
+
     implementation(project(Modules.moviesListData))
     implementation(project(Modules.moviesListDomain))
     implementation(project(Modules.moviesListInteractors))
     implementation(project(Modules.moviesListPresentation))
 
-
-//    implementation(project(Modules.moviesDetailsData))
-//    implementation(project(Modules.moviesDetailsDomain))
-//    implementation(project(Modules.moviesDetailsPresentation))
+    implementation(project(Modules.movieDetailsData))
+    implementation(project(Modules.movieDetailsDomain))
+    implementation(project(Modules.movieDetailsInteractors))
+    implementation(project(Modules.movieDetailsPresentation))
 
     implementation(Coil.coil)
 
@@ -73,6 +75,7 @@ dependencies {
     implementation(Compose.ui)
     implementation(Compose.material)
     implementation(Compose.tooling)
+    implementation(Compose.util)
     implementation(Compose.navigation)
     implementation(Compose.hiltNavigation)
 
@@ -85,6 +88,8 @@ dependencies {
     implementation(Ktor.core)
     implementation(Ktor.clientSerialization)
     implementation(Ktor.android)
+
+    implementation(YoutubePlayer.player)
 
     androidTestImplementation(AndroidXTest.runner)
     androidTestImplementation(ComposeTest.uiTestJunit4)

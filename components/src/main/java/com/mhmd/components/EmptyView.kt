@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun EmptyView(modifier: Modifier = Modifier) {
+fun EmptyView(modifier: Modifier = Modifier,message:String = stringResource(id = R.string.no_result)) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -35,7 +35,7 @@ fun EmptyView(modifier: Modifier = Modifier) {
                     .height(200.dp)
             )
             Text(
-                text = stringResource(id = R.string.no_result),
+                text = message,
                 style = MaterialTheme.typography.body1.copy(
                     color = MaterialTheme.colors.onBackground,
                     fontSize = 14.sp

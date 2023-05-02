@@ -4,14 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.*
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.ui.ExperimentalComposeUiApi
 import coil.ImageLoader
 import com.mhmd.movies.ui.navigation.Screen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.mhmd.movies.ui.navigation.addMoviesDetail
+import com.mhmd.movies.ui.navigation.addMovieDetails
 import com.mhmd.movies.ui.navigation.addMoviesList
 import com.mhmd.movies.ui.theme.MoviesTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,8 +40,9 @@ class MainActivity : ComponentActivity() {
                                 imageLoader = imageLoader,
                                 width = constraints.maxWidth / 2,
                             )
-                            addMoviesDetail(
+                            addMovieDetails(
                                 imageLoader = imageLoader,
+                                navController = navController,
                                 width = constraints.maxWidth / 2,
                             )
                         }
